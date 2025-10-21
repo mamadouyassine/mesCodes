@@ -1,0 +1,155 @@
+-----------------------------------------------------------------------------------
+#                                       CMD-WINDOWS                               #
+#                                                                                 #
+-----------------------------------------------------------------------------------
+->$ echo $env:<var_name> : nom variable
+->$ echo %env% : display via cmd
+->$ SET ENV=VAR : change valeur var d'env
+->$ systeminfo : os version
+->$ Get-Command -Module <Module_Name>: aide sur la cmd
+->$ net use S: /delete : dmonter le NAS Samba
+->$ net use : liste les disque partagés
+->$ net use S: \\PC2B090A.pcy.edf.fr\switch_interfaces /PERSISTENT:YES /USER:PC2B090A.pcy.edf.fr\3dx PWDS4mb4Switch : remonter le S sur BC
+->$ net use <Disque>: \\<Pc_name>\<Doc> /savecred /p:yes : rajouter des creds
+->$ net statistics workstation : montre depuis quand le system est up
+->$ net use S: \\pc2b0477.pcy.edf.fr\switch_interfaces /USER:3dx password : connecter à un lecteur reseau
+->$ Get-ScheduledTask "<task_name>" | Select -ExpandProperty Principal : verifié la création d'un task planifié
+->$	Get-ScheduledTaskInfo "<task_name>" : demarrer un task planifié
+->$ Unregister-ScheduledTask "<task_name>" : delete un task 
+->$ choco list --local-only :  lister les packages nuggets installés par chocolatey
+->$ choco uninstall <nom_du_package> : desinstaller un packages
+->$ Get-childItem Env: liste les var d'env du systeme
+->$ gci env: var_name : donne la valeur de la variable
+->$ gci env :psmodulepath : donne le path de la var
+->$ services.msc : verifier services en marche
+->$ $SWT_GROUP_CATIA : liste les vms BC used sur l'env hpc
+->$ SSMS : lance SQL server 
+->$ hostname : nom de la VM
+->$ Get-volume -DriveLetter <DISK Lettre>:  espace disk
+->$ C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp : contient les fichiers de demraages auto (nas, apllis)
+->$ Get-Process | select name, starttime : startime services 
+->$ net share <name>="C:\ShareDir" /grant:"user", FULL : partager un dossier
+->$ \\Hostname\ShareDir : voir le dossier sur n'importe quelle VM
+->$ net share <name> /delete
+->$ net stop ds_agent : stop DSA
+->$ net start ds_agent : redemarer DSA
+->$ query ds_agent : Verfif DSA A/R
+->$ Get-Service -Name SQL* : obtenir les infos sur un service
+->$ Get-ScheduledTask -TaskName '3DIndex Server' : lister une task schedulée par son nom
+->$ Disable-ScheduledTask -TaskPath '\USW_3DINDEX\' -TaskName '3DIndex Server' : desactiver une task schedulée
+->$ Enable-ScheduledTask -TaskPath '\USW_3DINDEX\' -TaskName '3DIndex Server' : activer une task schedulée
+->$ Unregister-ScheduledTask -TaskPath '\USW_3DINDEX\' -TaskName '3DIndex Server' -Confirm:$false -Verbose : supprimer une task schedulée
+->$ winrm e winrm/config/listener : list la conf du WINRM
+->$ \\10.130.214.13\shares : accèes partagae
+->$\\10.130.214.13\inetpub
+->$ certmgr : verrifier les certificats
+->$ C:\Windows\System32\drivers\etc\hosts : file host 
+->$ C:\ProgramData\DassaultSystemes\Licenses\DSLicSrv.txt : Licences Reqtify 
+->$ Certutil -hashfile C:\Users\Alfredlepoil\Downloads\lenomdufichier.iso SHA1 : checksum
+->$ openfiles /query 
+->$ Get-Package -Name *VMware* -ErrorAction SilentlyContinue : verifier l'existence d'un package.
+->$ lusrmgr.msc : gerer les users
+
+
+5L&a4q&Rn]4S
+
+\\10.130.214.61\Shares
+\\10.130.214.66\inetpub\Shares
+net use S: \\PC2B090A.pcy.edf.fr\switch_interfaces /PERSISTENT:YES /USER:PC2B090A.pcy.edf.fr\3dx PWDS4mb4Switch
+net use P: \\10.129.171.92\fsm_hkc_hkcrec3impwin /Persistent:Yes
+
+\\10.130.214.21\inetpub\Shares
+BC1 10.130.214.21
+BC2 .22
+IMPALA Cor 13
+
+\\10.130.214.13\test
+
+
+shares (file:)
+
+
+Shares (file://DCGFY3QE/Shares)
+
+Shares (file://DO1YY8VE/Shares)
+
+
+
+
+\\10.203.176.245\Shares
+
+
+
+
+
+
+
+
+
+
+
+ S:        \\pc2b0477.pcy.edf.fr\switch_interfaces
+ 
+ net use S: \\pc2b0477.pcy.edf.fr\switch_interfaces /USER:3dx password
+ 
+ 
+ [HPC][v18.0.0~8744c36][REC2/INTEG]
+[HPC][v18.0.0~8744c36][REC2/INTEG] Fin d'installation du BL hors indexations, tests interops et healthcheck
+ 
+ terminée hors injection et indexation et que tu passes le relais à l'équipe interop.
+ 
+ À la fin, redémarrez Cloudview sur tous les hôtes avec l'utilisateur "root".
+systemctl restart exalead_cloudview.service
+
+
+C'etait par rapport au fichiers ECM et EASYDOC à copier pour l'indexation sur APPR/v17.1.1.
+Sur REC3, c'etait Fred qui l'avait fait mais je ne vois pas la trace sur la page de suivie.
+
+Je me demandais si je copie toujours les m^mes fichiers utilisé en REC1-REC2 ??
+
+
+5L&a4q&Rn]4S
+
+
+
+Statistics since 09/08/2022 17:27:46
+
+
+
+
+Add-LocalGroupMember -Group "Users" -Member L26-HKC-10,L26-HKC-11
+
+Set-Disk 2 –IsOffline $false
+
+Get-Partition –DiskNumber 2 | Remove-Partition –Confirm:$false
+
+Initialize-Disk 2
+
+
+New-Partition 2 -Size 50gb -DriveLetter E
+Format-Volume -DriveLetter E -FileSystem NTFS -AllocationUnitSize 65536 -NewFileSystemLabel DATA -Confirm:$false
+LogWrite "[INFO] Partition E 'DATA' created"
+	
+LogWrite "[INFO] Creating partition H 'DATA_SQL' with size 400gb"
+New-Partition 2 -Size 400gb -DriveLetter H
+Format-Volume -DriveLetter H -FileSystem NTFS -AllocationUnitSize 65536 -NewFileSystemLabel DATA_SQL -Confirm:$false
+LogWrite "[INFO] Partition H 'DATA_SQL' created"
+
+LogWrite "[INFO] Creating partition I 'LOGS' with size 100gb"
+New-Partition 2 -Size 100gb -DriveLetter I
+Format-Volume -DriveLetter I -FileSystem NTFS -AllocationUnitSize 65536 -NewFileSystemLabel LOGS -Confirm:$false
+LogWrite "[INFO] Partition I 'LOGS' created"
+
+LogWrite "[INFO] Creating partition J 'BACKUP' with size 300gb"
+New-Partition 2 -Size 300gb -DriveLetter J
+Format-Volume -DriveLetter J -FileSystem NTFS -AllocationUnitSize 65536 -NewFileSystemLabel BACKUP -Confirm:$false
+LogWrite "[INFO] Partition J 'BACKUP' created"
+
+LogWrite "[INFO] Creating partition K 'TEMPDB' with max size"
+New-Partition 2 -UseMaximumSize -DriveLetter K
+Format-Volume -DriveLetter K -FileSystem NTFS -AllocationUnitSize 65536 -NewFileSystemLabel TEMPDB -Confirm:$false
+LogWrite "[INFO] Partition K 'TEMPDB' created"
+
+
+
+.\Setup.exe /IAcceptSQLServerLicenseTerms /ConfigurationFile='E:/ConfigurationFile.INI'

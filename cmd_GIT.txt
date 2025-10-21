@@ -1,0 +1,74 @@
+-----------------------------------------------------------------------------------
+#                                       CMD-GIT                                    #
+#                                                                                  #
+-----------------------------------------------------------------------------------
+
+->$ git config --local --list : uniquement au dépôt courant
+->$ git config --global --list : s'applique à tous les dépôts
+->$ git config --system --list : affectant tous les utilisateurs de la machin
+->$ git branch -vv : infos des branches locales et liens vers celles disantes
+->$ git push --set-upstream origin feature/DTDECC2AREA-521 : pousser une branche locale pour la première fois vers origin,  crée une liaison (un "tracking") entre votre branche locale et la branche distante correspondante
+->$ git push -u origin feature/DTE4566-453 : permet d'établir le suivi entre ta branche locale et la branche distance pour une première fois
+->$ git push -o merge_request.create --set-upstream origin feature/CCDC-MAJFSPAA
+->$ git push --force origin main : forcer la mise à jour du dépôt distant
+->$ git push origin nouveau-nom : pouser des changeùents sur une branhe distante
+->$ git branch --set-upstream-to=origin/<branch> remotes/origin/feature/DTDEEXSIM2AUTOM-17 : établit un lien entre la branche locale et la branche distant
+->$ git clone <url_git>
+->$ git status : quelle branche je suis et les changements opérés, les files en conflits
+->$ git switch <name_branch> : changer de branche ( nom des branhes feature/Orga )
+->$ git pull : recuperer les dernieres versions
+->$ git pull <name_branch> : recuperer les MAJ d'une branche
+->$ git pull origin NOM_DE_LA_BRANCHE : recupèrer des changement sur une branche distante
+->$ git checkout -b <name_branch> | git switch -c  : creer nouvelle branche et aller là dessus
+->$ git checkout -b nom_de_la_branche_locale origin/feature-x : pour une branche distante
+->$ git checkout <name_branch > : basculer sur une branche
+->$ git add <path/file> : ajouter les changements opérés sur le fichier concerné
+->$ git add . : ajouter les changements sur l'ensemble 
+->$ git commit -m "message" 
+->$ git push -o merge_request.create -u origin <name_branch> : Créer une demande de fusion à partir d'un commit déjà poussé 
+->$ git branch -d <name_branche> : supprimer une branche localement
+->$ git branch -D feature/Majbastion : forcer la suppresion d'une branche 
+->$ git push origin --delete feature/DTDECC2AREA-1030-bastion : supprimer une branch distante
+->$ git branch | grep -v "main" | xargs git branch -D : supprimer toutes les branches sauf le main localement
+->$ git branch -a : afficher toutes les branches locale et distantes
+->$ git branch -r : afficher les branches distantes
+->$ git branch -m nouveau-nom : renommer une branche en locale qu'on est déja là dessus
+->$ git branch -m ancien-nom nouveau-nom : renommer une branche en locale sans être dessus 
+->$ git push origin --delete ancien-nom : Supprimer l’ancienne branche sur le remote
+->$ git status : indique si la branche locale est à jour avec celle distante, montre les files non stagés et non trackés 
+->$ git diff --stat main..feature/DTDECC2AREA-521 : difference entre deux branches 
+->$ git reset HEAD^ : annuler le dernier commit local , en deselectionnant les files ajoutés. Il faut un discrad pour un état propre
+->$ git commit --amend : revenir sur le dernier commit, pour modifier un message de commit, ou rajouter un ou plusieurs files, 
+->$ git commit --amend -m "message" : revenir sur le message du dernier commit.
+->$ git commit -S --amend : signé un commit qui n'était pas 
+->$ git show <commit-hash> : voir les détails d'un commit
+->$ git rebase -i HEAD~4 : réécrire l'historique des commits dans Git de manière interactive (exec git commit --amend --no-edit -S) et fussionner les 4 derniers commit en un
+->$ git log --oneline : Affiche l'historique des commit avec leurs ID
+->$ git fetch : recup les dernièers modifs du depot distant sans chnager la branche active
+->$ git fetch --prune
+->$ git fetch --all : recuperer toutes les branches d'un depot distant 
+->$ git commit -S -m "add dependence role rerunoozie" : git commit with GPG 
+->$ rm -r .git/refs/remotes/origin/Feature : problème de git pull sur main
+->$ git checkout -b 'develop' 'origin/develop' : creer une branche locale base sur la distante
+->$	git rebase origin/main : Réécrit l'historique pour appliquer vos commits après ceux de origin/main, pas de commit de fusion
+->$ git merge origin/master : Crée un commit de fusion, combinant les changements des deux branches
+->$ git reset --hard HEAD^ : annuler une merge avant de la pousser, annuler un commit deja effectué et non poussé aussi
+->$ git reset --hard <ID_DU_COMMIT_PRÉCÉDENT> : supprime tous les commits après ce point
+->$ git revert -m 1 <SHA-du-commit-de-merge> : annuler une merge deja pussé via le hash du commit de fusion en gardant l'histo des commit. 
+->$ git reset --soft <ID> : Revient à un commit précédent sans supprimer les modifications locales
+->$	git push origin <nom-de-la-branche> : à faire après git revert
+->$ git rebase --abort : annuler un rebase qui n'est pas finaliser à cause des conflis
+->$ git diff HEAD origin/feature/CC2A_BIGDATA -- tasks/call_api_itzmi.http : comparer les modifs entre une branche locale et la branche distante pour un file en conflit
+->$ git merge --abort : ne fonctionne que si la fusion est dans un état de conflit
+->$	git stash push -m "message": Stocke les modifications locales et nettoie l’état du dépôt dans l'état du drnier commit pour qu'on puisse recup les modif plus tard
+->$ git stash list : affiche la liste des saves temporaire
+->$ git stash pop : Applique la dernière sauvegarde et la supprime de la liste ais avant se deplacer sur la branche de travail
+->$ git restore . : annule ttes les modifs locales ds les files suvis sauf ceux dans le staging area
+->$	git checkout -- . : annule ttes les modifs locales ds les files suvis sauf ceux dans le staging area
+->$ git restore --staged .  : annule ttes les modifs locales ds les files suvis et ceux dans le staging area sans supprimer les fichiers
+->$
+->$
+->$	
+->$
+->$
+->$

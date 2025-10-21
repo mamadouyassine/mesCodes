@@ -1,0 +1,532 @@
+-------------------------------------------------------------------------------------
+#                                       CMD-LINUX                                     #
+#                              LINUXIZE-ITCONNECT-SERVERFAUL-LAZYADMIN-INOS           #
+--------------------------------------------------------------------------------------
+->$ /dev/null : ignorer une sortie, à ne pas l'afficher
+->$ su - <nom_utilisateur> : Change l'utilisateur courant.
+->$ sudo : Exécute une commande en tant qu'un autre utilisateur (par défaut root).
+->$ sudo -l affiche les privilèges sudo disponibles pour l'utilisateur connecté
+->$ lsuser : 
+->$ ls -lart : lister par ordre,details et date
+->$ ls -ld : droits sur un rep
+->$ ls -h : affichage en GO
+->$ ls -vl : affiche par orde alphab
+->$ lsuser -a account_locked <rec-ppu> : verrifier un compte verrouiller ou pas
+->$ ll /appli/nas_svg/backups/ : backup NAS
+->$ rm /doc1/fic : delete file
+->$ ls -l | grep "^-" | wc -l : affiche nombre de fichiers dans un dir
+->$ find . -type f | wc -l : affiche nombre de fichiers dans un dir
+->$ rm -rf ./<->abc : supprimer fichier avec caratère specifiq 
+->$ rm -rf /doc1/doc2 : delete directory doc2 and contents
+->$ du -hs /rep : taille rep en go
+->$ du -hs /home/* | sort -h : taille sous rep par trie
+->$ man cmd: aide sur la cmd
+->$ nohup ./script & : lancer un processus en arriere plan
+->$ tail -f nohup.out :
+->$ uptime :  depuis quand le système est up
+->$ uptime -s : redemarrage de service
+->$ ulimit -a: liste les seuils des resources configurés dans /etc/security/limits.conf
+->$ cat /proc/<PID>/limits : 
+->$ service --status-all : liste tous les services avec leurs états.
+->$ top : affiche les processus
+->$ ps -ef : affiche les processus de tous les users avec plus d'infos
+->$ ps -aux : processus avec RAM using
+->$ ps -X : proccess tuer 
+->$ ps -u root -r: processus en cours de root
+->$ pstree : arborescence des processus
+->$ ps -ef | grep lsnr | grep -v grep : procesus lister oracle
+->$ ps -ef | grep -v grep | grep 7476 : voir le process encours
+->$ ps -ef | grep lsnr | grep -v grep : verifier les proces listener oracle
+->$ ps -ef | grep haproxy | grep -v grep : voir l'etat du haproxy sur ll-back et ll-front
+->$ htop : view de l'etat de la RAM en temps 
+->$ grep -r  "<motif_file>" /path/* : rechercher des fichiers recursivement 
+->$ kill -9 <pid> : arrêter un processus 
+->$ free -h: connaitre la RAM 
+->$ du -h filename.* : taille en Mo du file
+->$ df -h : taille du disk
+->$ df -Th : afficher avec le type
+->$ df -h /appli/3dx_data/interfaces : veifier que le NAS est up
+->$ ls -1A | wc : nombre élements dans un dir
+->$ wc -l 
+->$ cd /etc/systemd/system | ls : services en marche 
+->$ ll /lib/systemd/system : service en marche dans les librairies
+->$ /etc/init.d/ : stocke les scripts de lancement des daemons
+->$ cd - : appeler la dernière cmd
+->$ systemctl [statuts|stop|reload|restart|start] : active l'état du service
+->$ systemctl list-dependencies service_name : dependances d'un service
+->$ systemctl restart sssd
+->$ service --status-all : liste l'etats de touts les services
+->$ systemctl status svr_haproxy24@haproxy_front.service : etat haproxy switch 22x
+->$ systemctl disable --now  ds_agent : Desactiver le DSA Avant toutes Indexation FULL FTS sur VM INTERNAL, SERVICES1 et SEARCH 3DX 22x
+->$ hm start haproxy_front : relance
+->$ /var/haproxy/haproxy_back/haproxy_2.4/log : log haproxy 
+_>$ /appli/haproxy/haproxy_front/haproxy_2.4/conf : conf
+->$ /appli/haproxy/haproxy_front/haproxy_2.4/conf/UserAgent_whitelist.list : agent list
+->$ sudo crontab -l : mode lecture d'une contrab
+->$ sudo crontab -e : mode edition d'une contrab
+->$ journalctl --since [yesterday; today]: logs depuis le lendemain
+->$ journalctl --since "2022-11-06" --until "2022-11-16" -u activemq_IMPALA.service : voir les logs d'un intervall donneé pour un service
+->$ journalctl -p chiffre_niveau_incident : (0 = emerg, 1= alert, 2 = crit, 3=erreur, 4=warning, 5=notice, 6=info, 7=debug)
+->$ journalctl -xe : fournit des journaux système détaillés en temps réel, avec un accent sur les événements critiques ou d'erreur
+->$ cat /opt/oracle/orabase/diag/rdbms/db3dexp/DB3DEXP/trace/alert_DB3DEXP.log : logs BDD sur witch
+->$ ping -t : 
+->$ netstat -paunt : ports ouverts
+->$ netstat -lntup
+->$ nc -z -v @IP PORT : tester le flux sur un protocl donnée
+->$ ss -tulnp :
+->$ locate -b "[file_name]: localiser un file
+->$ find /appli/3dx_data -type f -iname "20220331_104022_Extract_DocHPC_ECM.xml"
+->$ find $BACKUP_DIR -maxdepth 1 -type f -mtime +21 -exec rm -f {} \; -print : supprimé un rep d'une date donnée
+->$ find /var/projects/3dx/spaceindex -type f -size +1M -exec ls -l {} \; : find files de plus de 1Mo
+->$ find /var/projects/3dx -type f -size +1M -exec rm -f {} \; -print
+->$ find /var/projects/3dx -type f -mtime +30 -exec rm -f {} \; -print : delete file de plus de 30 jours
+->$ find / -type f -iname "catalina.out"
+->$ grep -r "ERROR" /var/projects/3dx/* > text.tx : recherche recusrive dans les ifichiers un mot
+->$ grep -E 'mot1|mot2|mot3' fichier.txt : chercher plusieurs mots 
+->$ grep -B 3 -E "(  |^)System Error" /var/projects/3dx/space/server/mxtrace.log : permet de filtrer les lignes contenant System Error et d'afficher les 3 lignes précédentes (dont celle qui contient la date heure d'occurrence)
+->$ yum repolist all | grep 8.6 : afficher le repo 8.6 activés
+->$ yum repolist :  list des repo configuré
+->$ yum --showduplicates list open-vm-tools : voir les versions dispo d'un package sur toutes les versions des repo configurées
+->$ yum --disablerepo="*" --enablerepo="sysref-rhel-8.6-appstream" --showduplicates list open-vm-tools
+->$ yum install -y /path : install package
+->$ yum reinstall -y /path : delete and reinstall a package existant
+->$ yum list  installed *ART_C-transverse-PandO-tec : list paquet installés
+->$ yum history list all
+->$ yum list package* : list es package dispo dans le repo local configuré.
+->$ yum remove package
+->$ yum autoremove : dessinstaller avec les dependances, afaire apres yum remove
+->$ yum deplist package : dependances d'un package non installé
+->$ yum search package : trouver un package s'il existe dans les repo de la VM
+->$ yum deplist package
+->$ yum history list <package_name> : avoir l'état des transactions sur un package
+->$ yum history info <package_name> : avoir plus d'info sur la transaction
+->$ yum history info <transaction_ID> : avoir plus d'info sur la transaction
+->$ yum --showduplicates list <package_name> : vérifier les versions disponibles d’un package dans une machine
+->$ /etc/yum.repos.d/ : repo configuré
+->$ yum info nginx : avoir des infos sur le package, d'ou il provient (from)
+->$ repoquery -i open-vm-tools : info provenance paquet
+->$ rpm -qi package_name : savoir quand package a été installé.
+->$ rpm -qp --requires <fichier.rpm> : Vérifie les dépendances requises avant installation
+->$ chown 3dx:3dx filename 
+->$ chown 3dx:3dx -R Dir : recursivement
+->$ chgrp 3dx filename
+->$ chmod 777 -R /tmp/FichierIndex/ : recursivement 
+->$ chmod u=xwr,g=xwr,o=xwr,a=xwr filename
+->$ chmod 777 /var : empêche le reboot de la VM et la connexion ssh
+->$ umask : donne le mask user
+->$ cp -pa : copie conservant les proprietés avec l'horodatage
+->$ scp -rp /appli/3dx_data/PATCH_ORA/MAJ-PERFA_OracleRDBMS-19.16.0.0.220719_Linux-x86-64.zip NNI@pc2yy903.pcy.edf.fr:/appli/3dx_data/ : copier un file entre deux envs
+->$ /appli/3dx/space/scripts/mql : lancement mql SWITCH 3DX
+->$ set context user creator pass mdpass; : connnection user mql
+->$ list person SWT*; : liste user mql
+->$ verbose on : voir les logs d'un script sur mql
+->$ echo $SWT_DB_PWD : affciher var d'env et shell
+->$ printenv : toutes les variables d'env du système uniquement les variables d'environnement de l'utilisateur en cours
+->$ set : liste var shell
+->$ env : variables d'env de tous les users
+->$ export var='valeur' : exporter var shell en var d'env variable soit disponible pour les processus enfants de ce shell
+->$ which <cmd> : find cmd executable in path
+->$ export PATH="<DIR> :$PATH" : Add DIR to path temporairement
+->$ echo "export PATH="<DIR> :$PATH"" > ~/.bashrc : ajout permanent
+->$ echo $PATH: affiche le contenu de la var pah contenant le chemeins des cmds executables
+->$ nproc: nb processeur
+->$ lscpu: info processeur
+->$ cd
+->$ crontab -u 3dx -l : afficher crons user specifiq
+->$ tail /var/log/cron : voir les crons en marche
+->$ tail /var/spool/mail/root: Voir les en ecriture des logs sur les crons en marche
+->$ tail /var/projects/3dx/logs/exploitation/indexation/partial-indexation.sh_20231010.log : logs FTS-PARTIAL (INTERNAL)
+->$ cat /etc/redhat-release : version système redhat
+->$ oslevel -s : version syteme AIX
+->$ cat /etc/os-release : distribution, version du systeme
+->$ cut -d: -f1 /etc/passwd : tous les users locaux
+->$ cat /etc/login.defs : affiche l'aglo de hachage des mot de passes 
+->$ sudo cat /etc/shadow : afficher les mots de pass haches de tous les users
+->$ /var/log/secure : enregistre les événements de sécurité et d'authentification du systèm
+->$ sudo passwd nom_utilisateur : changer un mot de pass
+->$ sudo visudo : modifier le fichier sudoers (/etc/sudoers)
+->$ ctrl + c wq : enregister VI
+->$ ctrl + c i : insertion
+->$ ctrl+ c qa! : annuler 
+->$ ctrl+ a : debut ligne shell
+->$ ctrl+ e : fin ligne shell
+->$ ctrl + z bg : remettre l'execution d'un script avec nohup
+->$ nohup -p <10469> : lancer un process en arriere plan via le PID
+->$ cat /etc/profile.d/app_parameters.sh : variables d'env 3dx
+->$ cat /home/3dx/.profile.d/app_pwd.sh
+->$ awk '$1 > 100' txt.txt : afficher la colonne 1 avec les elements > 100
+->$ /var/spool/cron/www-data
+->$ /var/log/cronff
+->$ /var/log/cronf
+->$ dos2unix filename : 
+->$ tar xvf filename : dezipper
+->$ tar -czvf nom-de-l-archive.tar.gz /chemin/vers/répertoire-ou-fichier : compression avec archivage
+->$	tar -xzvf archive.tar.gz : decompression
+->$ zip 
+->$ unzip filename : dezipper
+->$ unzip -j filename : 
+->$ unzip -l : voir juste le contenu du zip
+->$ gzip -d  <file> : dezipper un fichier compressé. 
+->$ who : tous les users connectés actuelement
+_>$ last: liste tous les users connectés anciennement sur le srv
+->$ whoami : user sur la sesion courante
+->$ id : user sur la sesion courante
+->$ w : current user connectés
+->$ history -c : dell history
+->$ last : dernière con au système
+->$ sudo touch /appli/3dx_data/000_Gen-NOREBOOT.flag : crrer des flags pour non-reboot des Vms/HPC (sur le Nas)
+->$ sudo touch /appli/3dx_data/000_Gen-NOSTOPSTART.flag  : crrer des flags pour non-reboot des Vms/HPC (sur le Nas)
+->$ lsblk -f : liste toutes les partitions
+->$ vgdisplay : affiche le nom du group pour le LV
+->$ lvextend -L +7G /dev/mapper/data_vg-lv_OH1912Z210720 : Augmentente directement le FS de +7 go
+->$ resize2fs /dev/mapper/data_vg-lv_OH1912Z210720 : Apllique les changements sur le FS
+->$ lvextend -L 580G /dev/mapper/data_vg-lv_spaceindex_data -r : augmentation d'une partition logique à la valeur donnée(FS est dans VG data_vg, avec la taile totale du disque )
+->$ lvreduce -L -580G /dev/mapper/data_vg-lv_spaceindex_data -r : Reduire la taille à la valeur donnée(s'applique si on n'a pas passer l'option -r ou resize2fs)
+->$ lvresize --size 580G /dev/mapper/data_vg-lv_spaceindex_data  : Reduire la taille
+->$ lvdisplay /dev/mapper/data_vg-lv_spaceindex_data : affiche la taille du disque
+->$ pvscan : vérifier l'espace dispo
+->$ cat /etc/profile.d/switch_3dx_version.sh | grep VERSION_ANSIBLE_3DXAUTOMATION : version outillage 3Dx (ansible: version outillage ,  release: bl)
+->$ diff /appli/3dx/spaceindex/linux_a64/cv/data/config/DeploymentInternal.xml /appli/3dx/spaceindex/linux_a64/cv/data/config/DeploymentInternal.xml.save : la diff entre deux files
+->$ strace -c cmd : faire un rapport entre les appels systemes
+->$ source file.xt : charger des scripts  executer des cmd dans un file. Definir ou modifier des var d'envs sur le shell courant à travers un file.                                
+->$ dd: supprimer, ctrl z sur script bash
+->$ MAJ + y : copier une ligne bash                                                          
+->$ p : coller une ligne bash
+->$ :set number : affich number vi
+->$ /var/spool/mail : stock les sortie des logs pour taches.
+->$ dos2unix file.sh : 
+->$ run /appli/3dx/space/logs/sxi/validate/__global__/validate_searchindex_repair__1683650420609.tcl; ( executer en mql, corrige l'ecart des objets aprèes une FTS ) (ou used une delta pour corriger)
+->$ hostid : recuper id de la VM
+->$ stat file : avoir des infos sur la creation du file (creation, access, modif, change)
+->$ du -s --inodes space
+->$ ulimit -S -c unlimited : activate core dump on linux tempory (activer le vidange de memoire
+->$ ulimit -S -c O : deactivate tempory
+->$ /etc/security/limits.conf : définir les limites d’utilisation de certaines ressources système pour les users et groupe 
+->$ rpm -qa | grep selinux : verifier si le SELinux (règles de contrôle d'accès basées sur la sécurite)est prsént
+->$ hostname --short ; crontab -l | grep partial-indexation.sh
+->$ uname -s: montre le type de l'OS, lunix ou AIX
+->$ vmstat -s : 
+->$ duf . :
+->$ dust
+->$ vgs
+->$ systemctl reboot : redemarrage
+->$ last -x -F reboot : vérifier l'historique de redémarrage de votre système Linux
+->$ /etc/yum.repos.d/
+->$ https://www.base64decode.org/ : decode and decode base64
+->$ en root : /etc/profile.d/app_parameters.sh
+->$	en 3dx : /home/3dx/.profile.d/app_parameters.sh
+->$ cat /var/log/auth.log 
+->$ netstat -tuln: lister tous les ports configurés 
+->$ lsof +L1 : voir tous les process en cache 
+->$ /etc/ssh/sshd_config : securiser un srv ssh
+->$ uuidgen : creer un Universal Unique Identifier
+->$ curl -k  https://viviane.edf.fr : teste l'etablissement de la connexion sans proxy
+->$ curl -x http://proxy.edf.fr:8080 https://viviane.edf.fr : teste la connexion avec un vpn
+->$ TMTOUT=0 : pour pas se deco du terminal
+->$ ip a : @IP avec interfaces
+->$ hostname -I : @IP
+->$ TMOUT=0 : ne pas etre deco du terminal
+->$ bash --noprofile --norc : changer de shell
+->$ build && deploy : cmd de droite s'execute si celle de gauche reussit.
+->$ test -d /data || mkdir /data : cmd de droite s’exécute seulement si celle de gauche échoue (code retour ≠ 0)
+->$ ps aux | grep nginx :  envoie sortie standard de la commande de gauche vers l’entrée de celle de droite
+->$ [ -e chemin ] : existe (fichier ou dossier)
+->$ [ -f chemin ] : fichier régulier
+->$ [ -w chemin ] : inscriptible
+->$ [ -d chemin ] : dossier
+->$
+->$
+
+
+
+pkzip 
+socat
+gitenv
+zip -p 
+
+---------------LOG-------------------------
+
+Services1 : /var/projects/3dx/comment/tomee/
+
+APPLI : /var/projects/3dx/space/tomee/catalina.out /var/projects/3dx/space/server/mxtrace.log
+
+Swyn : /var/projects/3dx/swym/tomee
+
+
+
+URL is /search-api|http://pc20090b.pcy.edf.fr:19010/search-api
+
+https://www.sslchecker.com/certdecoder
+
+ mousemove.exe -timer 00_1_"C:\windows\notepad.exe"
+
+
+touch /appli/3dx_data/000_Gen-NOSTOPSTART.flag
+
+touch /appli/3dx_data/000_Gen-NOREBOOT.flag
+
+
+
+
+
+print program emxReadSpinnerAgent select property[DSOLicenseKey].value; : licenseces spinner mql
+
+
+
+
+
+
+
+
+
+Répertoires de copie :
+
+ECM : /appli/3dx_data/stores/interfaces/ALL_APP_DATA/ECM
+EASYDOC : /appli/3dx_data/stores/interfaces/ALL_APP_DATA/GED
+
+pc2b0689.pcy.edf.fr
+
+pc2b0687.pcy.edf.fr
+pc2b068a.pcy.edf.fr
+
+
+
+
+[HPC][v18.0.0~380d3e6][REC2/INTEG] Installation du BL
+
+
+
+
+Gardian: @Switch22!
+CACIA: 0Mr?sG_2g)0DdD
+ADAM: 6Vk?Fz!93(fIkF
+ATLAS(bureautique)@219484Madou
+
+https://space.hpc-recette2.edf.fr
+
+
+tomee batch : 3DSpaceBatch (VM interface)
+
+
+3dx      27534     1  0 Aug11 ?        00:00:00 /bin/bash ./tidy.sh -d all -e -r
+
+HKCEnovia123
+
+
+
+
+*
+
+
+-----TIDY----------------------
+
+PROD: https://si-jira.edf.fr/browse/DUSWSWITCHIQR-8288
+
+/appli/3dx/scripts/tidy/tidy.sh -s all -v all -a   == tidy
+
+
+/appli/3dx/scripts/tidy/tidy.sh -d all -e -r  == validate
+
+3dx      29393    1  0 10:10 pts/0    00:00:00 /bin/bash /appli/3dx/scripts/tidy/tidy.sh -d all -e -r
+
+
+
+31/01/23
+Tidy
+/var/projects/3dx/space/tidy/ validate PS : 38863
+
+REC3 validate PS: 127854
+
+
+systemctl restart tomee_federated.service : services
+fts : 34942
+
+
+# Lancement Maintenance_validate NMAIN020 mensuel le premier dimanche a 9H00
+
+00 9 * * 0 sudo -u 3dx /appli/3dx/scripts/tidy/tidy.sh -d all -e -r
+
+# Lancement Maintenance_tidy NMAIN030 Samedi 6H30
+
+30 6 * * 6 sudo -u 3dx /appli/3dx/scripts/tidy/tidy.sh -s all -v all -a 
+
+
+
+------------------------------------------------------------------------
+
+
+# Lancement Maintenance_validate NMAIN020 mensuel le premier dimanche a 9H00
+00 9 * * 0 sudo -u 3dx [ `/bin/date +\%d` -lt 8 ] && /appli/3dx_data/outils/scripts/maintenance/exec_validate.sh
+# Lancement Maintenance_tidy NMAIN030 Samedi 6H30
+30 6 * * 6 sudo -u 3dx /appli/3dx_data/outils/scripts/maintenance/exec_tidy.sh
+
+
+
+/var/projects/3dx/comment/tomee/catalina.out
+
+/appli/tomee/tomee_comment/webapps/comment/WEB-INF/classes/logback.xml
+
+pour lundi: https://si-jira.edf.fr/browse/DUSWARTC-10119
+
+
+________________________________________________________________
+
+
+cote train-c , lors de votre preparation du DEX HKC ,
+ attention sur machine SWYM il devrait y avoir un nouveau service à arreter/relancer via systemctl : videoconverter_swym.serviceA mettre
+ dans le DEX et les tests techniques jira d'arret/relance (source : 02 - MultiMax - V9 - [SWITCH] Architecture de Référence - Confluence (edf.fr))
+ 
+ 
+ 
+ MAJ INVENTAIRE 22X après deploiement SQL_SERVER
+
+Ze_vars_stream
+impala:
+swt_impala_sqlinstance
+
+sqlserver.yml
+sqlserver_instance_name:
+
+MSSQL$IHKCDE140R2
+
+SQLAgent$IHKCDE140R2
+
+
+
+3DEXP-EXPORT
+
+https://lbback.hpc-recette2.edf.fr/space
+
+
+SWT_CT_compte_technique_1 
+
+Pass: H!pwdpb_ct_1
+*
+
+echo %WIN_ROOT_PATH%
+
+
+
+21.0.0~1271F7B
+
+Job for svr_haproxy24@haproxy_front.service failed because the control process exited with error code
+
+
+
+systemctl status svr_haproxy24@haproxy_front.service
+
+
+
+5L&a4q&Rn]4S
+
+P)3bV9)w3g$Vm0
+
+
+
+ swt_interface_server_name: "{% if inventory_hostname in groups['catia_batch'] %}http://{{ hostvars[groups['interface'][groups.catia_batch.index(inventory_hostname)]]['ansible_host'] }}:7100/space{% endif %}"
+
+ "{% if inventory_hostname in groups['catia_batch'] %} SWT_CT_technical_user_pdms_{{ groups.catia_batch.index(inventory_hostname)+1 }} {% endif %}"
+ 
+ usw-system_team/usine/Warehouse/hpc_warehouse
+ 
+ inventories/HPC/RECETTE2/group_vars/all_inv
+ 
+ sqlcmd -S .\IUSWED140R5 -i E:\CreateDatabase.sql
+
+sqlcmd -S .\IUSWED140R5 -i E:\MapUser.sql
+
+RECETTE TECHNIQUE
+
+PSR/ DUSWARTC-15163
+DEX/ DUSWARTC-15122
+
+
+
+
+Les VM chez EDF sont dotées de 2 interfaces réseau :
+-	Interface admin : xxxB0yyy  => utilisé par les administrateurs/installateurs pour faire les gestes
+-	Interface front : xxxFYyyy    => utilisé par les modules applicatifs 
+
+
+
+
+BARBARA Alexis <alexis.barbara@3ds.com>; UM Bertrand <bertrand.um@edf.fr>; KUHN-BOBLET Marianne <Marianne.KUHN-BOBLET@3ds.com>; 
+MEME Francois - externe <francois-externe.meme@edf.fr>; BONNET Severine - externe <severine-externe.bonnet@edf.fr>; 
+GRAND Remi - externe <remi-externe.grand@edf.fr>; PAREE Laurent - externe <laurent-externe.paree@edf.fr>; MARCICAUD Charline - externe <charline-externe.marcicaud@edf.fr>;
+MARTINOVIC Dejan - externe <dejan-externe.martinovic@edf.fr>; RIYANTO Tony - externe <tony-t-externe.riyanto@edf.fr>; BARIC Igor - externe <igor-externe.baric@edf.fr>
+
+
+
+[HPC][PROD][22x] Licence cloud view
+Hello Betrand,
+
+Pourras tu effectuer une demande de la licence cloudview 
+sur la Prod HPC 22x dans le cadre de la prepartion de la MEP à venir.
+
+HostID : 
+
+________________________________________________________________
+
+
+Remarques SR v22x: 
+
+->1 MEP
+
+
+--PAF-- :
+2 fichier modifier pour la PAF :
+
+-imports_habilitations et vars.yml
+Valeur servuer interfaces dans hosts
+
+
+--Reqtify---
+:Ajouetr le lien de telechargement de nexus sur la PTI
+
+---CIFS---
+
+Donner les habilitations du NAS windows sur IMPALA_DB
+
+
+3 Cloud view
+Rajout de la partie augmentant la taille du fcihier GED à 750 Mo sur la console web
+
+
+->2 RECETTE----
+FTS : Changer sur les env de recette le config.xml avec l'url du DNS FO ex VM SERACH/REC5 : dcg003vj.pcy.edf.fr
+PTI : changer les valeurs PMC_URL
+Reqtify : verify conf connection user (REC5/REC6)
+
+
+
+
+--------------------------------------------+
+
+
+# Lancement WINN_VERSION NJOUR010 Quotidien a 22h00
+00 22 * * * [[ ! -e /appli/3dx_data/NO_CRON ]] && su - 3dx -c "mkdir -p /appli/3dx_data/winn/version ; wget --output-document=/appli/3dx_data/winn/version/version.json  http://localhost:33080/version"
+
+
+
+# Lancement Maintenance_validate NMAIN020 mensuel le premier dimanche a 9H00
+00 9 * * 0 [[ ! -e /appli/3dx_data/NO_CRON ]] && su - 3dx -c "/appli/3dx/space/switch/transfer_files/TRV_EXPLOITATION/3DSpace/scripts/tidy/tidy.sh -d all -e -r"
+
+
+
+
+# Lancement Maintenance_tidy NMAIN030 Jeudi 20H30
+30 20 * * 4 [[ ! -e /appli/3dx_data/NO_CRON ]] && su - 3dx -c "/appli/3dx/space/switch/transfer_files/TRV_EXPLOITATION/3DSpace/scripts/tidy/tidy.sh -s all -v all -a"
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+https://si-jira.edf.fr/browse/DUSWARTC-15687
+https://si-jira.edf.fr/browse/DUSWARTC-10123
+
+----------------------3DX----------------------
+
+
+https://www.3ds.com/support/documentation/user-guides
+Nom USER : OMYyassine

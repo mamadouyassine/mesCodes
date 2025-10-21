@@ -1,0 +1,25 @@
+-----------------------------------------------------------------------------------
+#                                       CMD-Oracle                                #
+#                                                                                  #
+-----------------------------------------------------------------------------------
+->$ select * from all_users : All tables in DB
+->$ sqlplus / as sysdba : connect as sysdba orcale
+->$ sqlplus system@DB3DEXP : connection a partir du client
+->$ DROP TABLE [&1..HPC_DFA_RECONCILIATION] PURGE;
+->$ shutdown immediate; : arret la BD
+->$ startup; : restart la BD
+->$ ps -ef | grep pmon : verifier si l'instance est up
+->$ ps -ef | grep tnslsnr : verifier que le lsiterner est up
+->$ select instance_name, status, database_status from v$instance; : verifier bd up
+->$ lsnrctl services
+->$ tnsping DB3DEXP: ping linstnr
+->$ sqlplus system@DB3DEXP: se connecter à la BD via aute VM
+->$ cat tnsnames.ora : config /var/opt/oracle/CONF/network/admin 
+->$ lsnrctl stop; lsnrctl start : redemarrage du listerner
+->$ select * from v$diag_info where name = 'Diag Trace'; : trouver le chemin des alertes sur les logs oracle 
+->$ 
+->$
+->$
+->$
+->$
+
