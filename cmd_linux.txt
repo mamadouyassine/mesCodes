@@ -171,7 +171,7 @@ _>$ /appli/haproxy/haproxy_front/haproxy_2.4/conf : conf
 _>$ last: liste tous les users connectés anciennement sur le srv
 ->$ whoami : user sur la sesion courante
 ->$ id : user sur la sesion courante
-->$ w : current user connectés
+->$ w : current user connectés via ssh
 ->$ history -c : dell history
 ->$ last : dernière con au système
 ->$ sudo touch /appli/3dx_data/000_Gen-NOREBOOT.flag : crrer des flags pour non-reboot des Vms/HPC (sur le Nas)
@@ -529,4 +529,5 @@ https://si-jira.edf.fr/browse/DUSWARTC-10123
 
 
 https://www.3ds.com/support/documentation/user-guides
+
 Nom USER : OMYyassine
