@@ -22,6 +22,8 @@
 ->$ git checkout -b <name_branch> | git switch -c  : creer nouvelle branche et aller là dessus
 ->$ git checkout -b nom_de_la_branche_locale origin/feature-x : pour une branche distante
 ->$ git checkout <name_branch > : basculer sur une branche
+->$ git rm --cahched wwwroot : ne pas trackter le wwwroot
+->$ git check-ignore -v wwwroot : verifier que le dir n'est pas trackter
 ->$ git add <path/file> : ajouter les changements opérés sur le fichier concerné
 ->$ git add . : ajouter les changements sur l'ensemble 
 ->$ git commit -m "message" 
