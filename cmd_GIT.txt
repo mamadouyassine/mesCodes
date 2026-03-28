@@ -45,6 +45,8 @@
 ->$ git rebase -i HEAD~4 : réécrire l'historique des commits dans Git de manière interactive (exec git commit --amend --no-edit -S) et fussionner les 4 derniers commit en un
 ->$ git log --oneline : Affiche l'historique des commit avec leurs ID
 ->$ git fetch : recup les dernièers modifs du depot distant sans chnager la branche active
+->$ git log HEAD..origin/master : diff entre local et remote master
+->$ git diff HEAD origin/master : montre leslignes ajoutées.
 ->$ git fetch --prune
 ->$ git fetch --all : recuperer toutes les branches d'un depot distant 
 ->$ git commit -S -m "add dependence role rerunoozie" : git commit with GPG 
