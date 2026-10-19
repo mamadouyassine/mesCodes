@@ -1,0 +1,104 @@
+#--------------------------------------------------------------------------------#
+#                                    CMD-K8S                                     #
+#                 LINUXIZE - ITCONNECT - SERVERFAULT - LAZYADMIN - INOS          #
+#--------------------------------------------------------------------------------#
+
+k = kubectl (alias à définir avec : alias k='kubectl').
+Les éléments entre <...> sont à remplacer. ns = namespace.
+Sans -n <namespace>, les commandes utilisent le namespace courant.
+Les noms, adresses et identifiants internes ont été remplacés par des exemples.
+
+->$ k get events --field-selector involvedObject.kind=Pod,involvedObject.name=<pod> : événements du pod.
+->$ k get deployment <deployment> -o yaml : afficher le Deployment au format YAML.
+->$ k get pod <pod> -o yaml : afficher le pod au format YAML.
+->$ k exec -it <pod> -- curl -vk https://<hote>:443 : tester HTTPS depuis le pod ; -v affiche les détails, -k ignore la validation du certificat.
+->$ k get pod <pod> -o jsonpath='{.spec.containers[*].name}' : afficher les noms des conteneurs du pod.
+->$ k get all -A : lister les principales ressources dans tous les namespaces (pas toutes les ressources Kubernetes).
+->$ k get all : lister les principales ressources du namespace courant.
+->$ k exec -it <pod> -- sh : ouvrir un shell dans le conteneur sélectionné par défaut.
+->$ k exec -it <pod> -c <conteneur> -- sh : ouvrir un shell dans un conteneur précis.
+
+->$ k exec -it <pod> -c <sidecar> -- curl --location --request DELETE 'http://localhost:8080/v1/consumers' \
+    --header 'UserId: <user-id>' \
+    --header 'X-B3-SpanId: <span-id>' \
+    --header 'X-B3-TraceId: <trace-id>' \
+    --header 'Channel: <channel>' \
+    --header 'TelematicId: <telematic-id>' \
+    --header 'commercialThirdPartyScope: <scope>' \
+    --header 'commercialBrand: <brand>'
+    : envoyer une requête DELETE depuis le sidecar ; localhost désigne le réseau du pod.
+
+#---------------------------- Décommissionnement CFT ----------------------------#
+
+->$ helm ls : lister les releases Helm du namespace courant.
+->$ helm uninstall <release-cft-monitor> : désinstaller la release Helm et ses ressources gérées.
+->$ kgp : raccourci personnel pour lister les pods ; dépend de l'alias configuré.
+->$ k get pvc : lister les demandes de stockage persistant.
+->$ k delete <type-ressource> <nom-cft-monitor> : supprimer la ressource indiquée ; le type manquait dans la note.
+->$ k get pvc : vérifier les PVC encore présents.
+->$ k delete pvc <pvc-cft-monitor-data> : supprimer le PVC ; le devenir du volume et des données dépend de la politique du PV.
+->$ history : afficher l'historique des commandes du shell.
+
+#--------------------------- Accès et connectivité ------------------------------#
+
+->$ k exec -it <pod> -- curl --noproxy '*' --cert /chemin/client.crt \
+    --key /chemin/client.key https://<hote>:<port>/<route>
+    : tester un appel HTTPS avec certificat client, sans passer par un proxy.
+    Note : la fin de cette commande est hors cadre sur la photo ; l'URL est à compléter.
+
+#--------------------------- Deployments et pods --------------------------------#
+
+->$ k delete deployment <deployment> : supprimer le Deployment et les pods qu'il gère.
+->$ k delete rs <replicaset> : supprimer le ReplicaSet et ses pods ; un Deployment peut le recréer.
+->$ k delete pod --all -n <namespace> : supprimer tous les pods du namespace ; les contrôleurs peuvent les recréer.
+->$ k scale deployment <deployment> --replicas=0 : mettre à zéro le nombre de pods souhaité du Deployment.
+->$ k edit deployment <deployment> : modifier le Deployment dans l'éditeur.
+->$ k get <ressource> -o wide : afficher des colonnes supplémentaires, selon le type de ressource.
+    Note : « k get -o wide » était incomplet ; préciser pods, services, nodes…
+
+#-------------------------------- Jobs et batchs --------------------------------#
+
+->$ k create job <job-manuel> --from=cronjob/<cronjob> : lancer un Job à partir du modèle d'un CronJob.
+->$ k get jobs <job> -w : suivre en direct les changements d'état du Job.
+->$ k logs -f job/<job> : suivre les logs d'un pod du Job.
+->$ k describe statefulset <statefulset> : afficher l'état détaillé et les événements du StatefulSet.
+->$ k describe job <job> | grep -i image : rechercher les images dans la description du Job.
+
+#------------------------------------ Logs --------------------------------------#
+
+->$ k logs <pod> : afficher les logs du conteneur sélectionné par défaut.
+->$ k logs <pod> --previous : afficher les logs de l'instance précédente du conteneur, si disponibles.
+->$ k logs <pod> -c <conteneur> : afficher les logs d'un conteneur précis.
+->$ k logs <pod> --since=10m : afficher les logs des dix dernières minutes.
+->$ k rollout history deployment <deployment> : afficher l'historique des révisions conservées du Deployment.
+
+#----------------------------- Tests dans le conteneur --------------------------#
+
+Les commandes suivantes s'exécutent dans le conteneur, après k exec.
+curl et netstat doivent être disponibles dans l'image.
+
+->$ curl -v http://127.0.0.1:3000/health : tester la réponse de l'endpoint de santé local ; vérifier son chemin dans la livenessProbe.
+->$ curl -vk -x <proxy>:3131 https://<hote>:<port> : tester HTTPS via le proxy ; -k ignore la validation du certificat.
+->$ netstat -tlpn : afficher les ports TCP en écoute et, si les droits le permettent, les processus associés.
+->$ cat /applis/vault/.env : afficher le fichier .env injecté par Vault ; il peut contenir des secrets, pas uniquement des certificats.
+
+#------------------------------------- HPA --------------------------------------#
+
+->$ k get hpa : afficher les autoscalers, leurs métriques et le nombre de réplicas.
+->$ k get hpa -w : suivre en direct les changements des HPA.
+
+#------------------------ Commande de démarrage d'un pod -------------------------#
+
+->$ k get pod <pod> -o jsonpath='{range .spec.containers[*]}{"\nCONTAINER: "}{.name}{"\nCOMMAND: "}{.command}{.args}{"\n"}{end}'
+    : afficher, pour chaque conteneur, les champs command et args déclarés dans le pod.
+
+->$ k get pod <pod> -o jsonpath='{.spec.containers[*].command}'
+    : afficher les commandes déclarées dans le pod ; un résultat vide peut signifier que la commande vient de l'image.
+
+->$ k get pod <pod> -o jsonpath='{.spec.containers[*].name}'
+    : afficher les noms des conteneurs du pod.
+
+#------------------------------- Arrêt d'un batch -------------------------------#
+
+->$ k patch cronjob <cronjob> --type=merge -p '{"spec":{"suspend":true}}'
+    : suspendre les prochains lancements du CronJob ; les Jobs déjà démarrés continuent.
