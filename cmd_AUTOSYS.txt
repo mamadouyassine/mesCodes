@@ -1,0 +1,198 @@
+#--------------------------------------------------------------------------------#
+#                                  AUTOSYS                                       #
+#                        COMPRENDRE ET UTILISER LES COMMANDES                    #
+#--------------------------------------------------------------------------------#
+
+Les éléments entre <...> sont à remplacer, sans conserver les chevrons.
+Les noms internes ont été remplacés par des exemples génériques.
+Ces commandes nécessitent un environnement AutoSys configuré et les droits adaptés.
+
+#------------------------------- 1. C'est quoi ? --------------------------------#
+
+AutoSys est un ordonnanceur : il planifie, déclenche et suit des traitements
+automatiques appelés jobs (scripts, sauvegardes, transferts, calculs, etc.).
+Il permet de lancer un traitement à une heure donnée, selon un calendrier
+ou après la réussite d'un autre job.
+
+Exemple : chaque soir, sauvegarder une application, puis transférer le fichier
+uniquement si la sauvegarde a réussi.
+
+#----------------------------- 2. Comment c'est structuré ? ----------------------#
+
+CÔTÉ TECHNIQUE
+
+Scheduler       : décide quand lancer les jobs en évaluant leurs conditions.
+Agent           : installé sur la machine d'exécution ; lance le traitement
+                  et remonte son état.
+Base de données : conserve les définitions, les événements et les états.
+Application
+Server          : permet aux clients d'accéder aux informations et services AutoSys.
+CLI / interface : permettent de consulter les jobs et d'envoyer des actions.
+
+CÔTÉ TRAITEMENTS
+
+Job             : unité de travail. Un job de commande exécute un script ou
+                  une commande sur une machine, avec un compte donné.
+Box             : job de regroupement contenant des jobs et éventuellement
+                  d'autres box. Elle ne lance pas elle-même un script.
+                  Les jobs qu'elle contient suivent leurs propres conditions
+                  lorsque la box est en cours d'exécution.
+Dépendance      : condition reliant des jobs ; par exemple attendre le succès
+                  d'un autre job.
+Calendrier      : ensemble de dates autorisées ou exclues pour les lancements.
+Variable globale: valeur partagée utilisable dans les conditions ou traitements.
+JIL             : langage texte qui décrit les objets AutoSys et leurs attributs.
+                  La commande jil applique ces définitions à AutoSys.
+
+Une box ne fixe pas automatiquement l'ordre des jobs : les dépendances le font.
+Un job peut aussi exister sans box.
+
+#------------------------------ 3. Comment ça fonctionne ? ----------------------#
+
+Exemple pédagogique : une box BOX_SAUVEGARDE contient JOB_SAVE et JOB_TRANSFERT.
+
+1. La box est planifiée à 22 h, du lundi au vendredi.
+2. À l'heure prévue, si ses conditions sont remplies, la box démarre.
+3. JOB_SAVE devient éligible et l'agent lance le script de sauvegarde.
+4. L'agent remonte le résultat ; AutoSys met à jour l'état du job.
+5. JOB_TRANSFERT attend condition: s(JOB_SAVE), donc le succès de JOB_SAVE.
+6. Si JOB_SAVE réussit et que les autres conditions sont remplies, le transfert
+   démarre. Sinon, cette dépendance reste non satisfaite.
+7. La box termine selon les états de ses jobs et ses règles de fin configurées.
+
+ÉTATS COURANTS
+
+INACTIVE  : job inactif.
+ACTIVATED : job dans une box, activé et en attente de ses conditions.
+STARTING  : lancement en cours.
+RUNNING   : traitement en cours.
+SUCCESS   : traitement terminé avec succès selon les critères configurés.
+FAILURE   : traitement terminé en échec.
+ON_HOLD   : job bloqué volontairement.
+
+#------------------------------- 4. Lire une définition JIL ----------------------#
+
+Attributs utiles pour comprendre les informations obtenues avec autorep -q :
+
+job_type       : type de job ; BOX pour une box, CMD pour une commande.
+box_name       : box qui contient le job.
+command        : commande ou script à exécuter.
+machine        : machine cible.
+owner          : compte utilisé pour l'exécution.
+date_conditions: active ou désactive les conditions de date et d'heure.
+days_of_week   : jours de la semaine autorisés.
+start_times    : heures de lancement prévues.
+run_calendar   : calendrier des dates de lancement.
+exclude_calendar: calendrier des dates à exclure.
+condition      : dépendances nécessaires au démarrage.
+std_out_file   : fichier de sortie standard du traitement.
+std_err_file   : fichier de sortie d'erreur du traitement.
+
+days_of_week: mo,tu,we,th,fr
+    : attribut JIL pour autoriser les jours du lundi au vendredi ;
+      ce n'est pas une commande shell. Nécessite date_conditions: 1.
+
+#------------------------------- 5. Commandes de tes notes -----------------------#
+
+AIDE
+
+->$ autohelp : aide notée dans ton environnement ; disponibilité à vérifier
+              selon l'installation (peut être un outil ou raccourci local).
+
+CONSULTER LES JOBS ET BOX
+
+->$ autorep -j "*AM2945*" : afficher le résumé des jobs et box dont le nom
+                           correspond au motif du code applicatif.
+                           Les guillemets empêchent le shell d'interpréter *.
+
+->$ autorep -j <box-ou-job> -q : afficher la définition JIL et ses paramètres ;
+                               ce n'est pas le contenu du script exécuté.
+
+->$ autorep -j <job> : afficher le résumé d'exécution, dont l'état du job.
+
+EXPORTER PUIS APPLIQUER DU JIL
+
+->$ autorep -j <box> -q > toto.jil : exporter la définition JIL affichée vers
+                                  toto.jil ; > écrase le fichier s'il existe.
+                                  Vérifier les jobs inclus dans l'export.
+
+->$ vi toto.jil : modifier le fichier JIL avec l'éditeur vi.
+
+Pour modifier un objet existant, utiliser update_job: <nom> avec les attributs
+à changer. insert_job: sert à créer un objet ; un export n'est donc pas
+automatiquement prêt à être réimporté comme mise à jour.
+
+->$ jil < toto.jil : soumettre les instructions du fichier à AutoSys pour créer
+                    ou modifier les objets, selon les instructions présentes.
+                    Consulter les messages retournés pour vérifier le résultat.
+
+SUPPRIMER UN JOB OU UNE BOX
+
+->$ vi delete-job.jil : créer ou modifier le fichier de suppression.
+
+Contenu du fichier pour supprimer un job :
+delete_job: <job>
+
+->$ jil < delete-job.jil : appliquer la suppression décrite dans le fichier.
+
+Pour supprimer uniquement une box et conserver ses jobs :
+delete_job: <box>
+    : les jobs qu'elle contient deviennent indépendants.
+
+Pour supprimer une box ET tous les jobs qu'elle contient :
+delete_box: <box>
+
+Ce sont des instructions JIL à placer dans un fichier soumis à jil ;
+elles ne se lancent pas directement comme commandes shell.
+
+VARIABLE GLOBALE ET CALENDRIER
+
+->$ autorep -G <variable-globale> : afficher une variable globale et sa valeur.
+                                  Correction : ce n'est pas un calendrier.
+
+->$ autocal_asc : outil en ligne de commande pour consulter et gérer les
+                 calendriers ; les options dépendent de la version installée.
+                 Dans la définition du job, regarder run_calendar et
+                 exclude_calendar pour identifier les calendriers utilisés.
+
+FORCER UN LANCEMENT
+
+->$ sendevent -E FORCE_STARTJOB -J <job-ou-box> : demander un démarrage forcé,
+                                               même si les conditions de
+                                               démarrage ne sont pas remplies.
+
+Forcer une box active son cycle ; les jobs internes suivent ensuite leurs
+propres conditions. Forcer un job cible ce traitement.
+Il s'agit d'un nouveau lancement, pas d'une reprise automatique à l'endroit
+de l'échec : le comportement de reprise dépend du script.
+
+#------------------------------- 6. Relier les commandes au fonctionnement -------#
+
+autorep -j <job>       : où en est le traitement ?
+autorep -j <job> -q    : que doit-il exécuter, où, quand et sous quelles conditions ?
+autorep ... > toto.jil : exporter les paramètres consultés.
+vi toto.jil           : préparer les changements dans le fichier.
+jil < toto.jil        : appliquer ces changements à la configuration AutoSys.
+sendevent ...         : envoyer une action à l'ordonnanceur.
+
+Pour comprendre un job qui ne démarre pas, lire sa définition et vérifier
+sa box éventuelle, ses horaires, son calendrier et les jobs dont il dépend.
+
+#------------------------------- Références Broadcom -----------------------------#
+
+Architecture et objets :
+https://docs.broadcom.com/doc/exam-study-guide-exam-250-613-technical-specialist
+
+Guide utilisateur (JIL, jobs, box, suppression) :
+https://ftpdocs.broadcom.com/cadocs/0/CA%20Workload%20Automation%20AE%20Release%2011%203%206%20-%20Public%20Access-ENU/Bookshelf_Files/PDF/WA_AE_User_ENU.pdf
+
+Commande autorep :
+https://techdocs.broadcom.com/us/en/ca-enterprise-software/intelligent-automation/autosys-workload-automation/12-1/reference/ae-commands/monitor-and-report-on-workload/autorep-command-report-job-machine-and-variable-information.html
+
+Variables globales :
+https://knowledge.broadcom.com/external/article/10791/using-environment-variablesglobal-variab.html
+
+Démarrage forcé :
+https://techdocs.broadcom.com/us/en/ca-enterprise-software/intelligent-automation/autosys-workload-automation/12-0/scheduling/ae-scheduling/box-jobs-overview/box-job-attributes-and-terminators/force-jobs-in-a-box-to-start.html
+
+#--------------------------------------------------------------------------------#
